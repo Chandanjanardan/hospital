@@ -270,11 +270,6 @@ textarea.input { height: auto; min-height: 88px; padding: 10px 12px; resize: ver
 
 .login-form .btn-primary { width: 100%; }
 
-.demo-note {
-  font-size: 13px; color: var(--ink-faint);
-  border-top: 1px solid var(--line); padding-top: 16px;
-}
-.demo-note code { font-family: inherit; font-weight: 600; color: var(--ink-soft); }
 
 @media (max-width: 860px) {
   .login { grid-template-columns: 1fr; }
@@ -343,6 +338,10 @@ textarea.input { height: auto; min-height: 88px; padding: 10px 12px; resize: ver
 .page-head p { margin: 6px 0 0; color: var(--ink-soft); }
 
 .view[hidden] { display: none; }
+
+/* Hidden until the session check passes, so signed-out visitors never see the app */
+.is-loading .main,
+.is-loading .rail-user { visibility: hidden; }
 
 /* ---------- Patient entry ---------- */
 

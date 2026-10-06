@@ -23,16 +23,19 @@
 
   /* ---------- Session ---------- */
 
-  Api.me()
-    .then((user) => {
-      $('userName').textContent = user.name;
-      $('userId').textContent = user.userId;
-    })
-    .catch(() => { window.location.replace('index.html'); });
+  function backToLogin() {
+    window.location.replace('index.html');
+  }
+
+  // Any request that finds the session gone sends the user back to sign in
+  function handleError(err) {
+    if (err.status === 401) return backToLogin();
+    toast(err.message);
+  }
 
   $('signOut').addEventListener('click', async (e) => {
     e.preventDefault();
-    await Api.logout();
+    try { await Api.logout(); } catch { /* signing out locally is enough */ }
     window.location.href = 'index.html';
   });
 
@@ -65,7 +68,12 @@
     form.visitDate.max = localISO();
     $('remarksCount').textContent = '0 / 500';
     fields.forEach((f) => setError(f, ''));
-    $('regNo').textContent = await Api.nextRegNo();
+    try {
+      $('regNo').textContent = await Api.nextRegNo();
+    } catch (err) {
+      $('regNo').textContent = '—';
+      if (err.status === 401) backToLogin();
+    }
   }
 
   function setError(name, message) {
@@ -139,7 +147,12 @@
       await resetForm();
       form.patientName.focus();
     } catch (err) {
-      toast(err.message || 'The patient couldn’t be saved. Check your connection and try again.');
+      if (err.fields) {
+        fields.forEach((f) => setError(f, err.fields[f] || ''));
+        const bad = fields.find((f) => err.fields[f]);
+        if (bad) (bad === 'gender' ? $('g-male') : form[bad]).focus();
+      }
+      handleError(err);
     } finally {
       btn.disabled = false;
       btn.textContent = 'Save patient';
@@ -229,10 +242,15 @@
       [filters.from, filters.to] = [filters.to, filters.from];
     }
 
-    const [list, todayList] = await Promise.all([
-      Api.listPatients(filters),
-      Api.listPatients({ from: localISO(), to: localISO() }),
-    ]);
+    let list, todayList;
+    try {
+      [list, todayList] = await Promise.all([
+        Api.listPatients(filters),
+        Api.listPatients({ from: localISO(), to: localISO() }),
+      ]);
+    } catch (err) {
+      return handleError(err);
+    }
 
     // Summary
     const count = { Male: 0, Female: 0, Other: 0 };
@@ -271,5 +289,13 @@
     lastSavedId = null;
   }
 
-  showView();
+  // Only show the app once the session is confirmed
+  Api.me()
+    .then((user) => {
+      $('userName').textContent = user.name;
+      $('userId').textContent = user.userId;
+      document.body.classList.remove('is-loading');
+      showView();
+    })
+    .catch(backToLogin);
 })();

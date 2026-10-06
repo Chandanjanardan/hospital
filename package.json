@@ -5,13 +5,12 @@
   "type": "module",
   "description": "Hospital front-desk patient register: login, patient entry and dashboard.",
   "scripts": {
-    "dev": "node --env-file-if-exists=.env server.js",
-    "start": "node server.js",
+    "dev": "node --env-file-if-exists=.env dev-server.js",
     "db:setup": "node --env-file-if-exists=.env scripts/setup-db.js",
-    "user:add": "node --env-file-if-exists=.env scripts/add-user.js"
+    "user:set": "node --env-file-if-exists=.env scripts/set-user.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",

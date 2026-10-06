@@ -5,6 +5,9 @@
   const password = document.getElementById('password');
   const toggle = document.getElementById('togglePassword');
 
+  // Already signed in: go straight to the app
+  Api.me().then(() => window.location.replace('app.html')).catch(() => {});
+
   toggle.addEventListener('click', () => {
     const showing = password.type === 'text';
     password.type = showing ? 'password' : 'text';
