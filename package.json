@@ -1,0 +1,23 @@
+{
+  "name": "hospital-front-desk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Hospital front-desk patient register: login, patient entry and dashboard.",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server.js",
+    "start": "node server.js",
+    "db:setup": "node --env-file-if-exists=.env scripts/setup-db.js",
+    "user:add": "node --env-file-if-exists=.env scripts/add-user.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

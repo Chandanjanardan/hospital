@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · CarePoint Front Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="login">
+    <section class="login-brand" aria-label="CarePoint Hospital">
+      <div class="brand-mark">
+        <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#E8B931"/>
+          <path d="M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z" fill="#143F3A"/>
+        </svg>
+        <span>CarePoint Hospital</span>
+      </div>
+
+      <div class="login-hero">
+        <div class="trace" aria-hidden="true">
+          <svg class="trace-line" viewBox="0 0 800 120" preserveAspectRatio="none">
+            <path d="M0 70 H210 L228 70 L240 52 L252 70 H300 L316 70 L330 8 L348 112 L362 70 H400 L420 70 L436 46 L452 70 H490 M570 70 H800"/>
+          </svg>
+          <svg class="trace-heart" viewBox="0 0 24 24">
+            <path d="M12 20.5s-7-4.4-9.2-8.9C1.3 8.4 3.2 4.5 7 4.5c2.2 0 3.9 1.2 5 3 1.1-1.8 2.8-3 5-3 3.8 0 5.7 3.9 4.2 7.1-2.2 4.5-9.2 8.9-9.2 8.9z"/>
+          </svg>
+        </div>
+        <h1>Front desk register</h1>
+        <p>Record every walk-in once, and find any visit again in seconds.</p>
+      </div>
+
+      <footer>For hospital staff only. Every entry is saved with your user ID.</footer>
+    </section>
+
+    <section class="login-panel">
+      <form class="login-form" id="loginForm" novalidate>
+        <div>
+          <h2>Sign in</h2>
+          <p class="lede">Use the user ID and password from your administrator.</p>
+        </div>
+
+        <div class="form-alert" id="loginAlert" role="alert" hidden></div>
+
+        <div class="field">
+          <label for="userId">User ID</label>
+          <input class="input" id="userId" name="userId" autocomplete="username" autocapitalize="none" spellcheck="false" required autofocus>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="password-wrap">
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="button" class="password-toggle" id="togglePassword" aria-controls="password" aria-pressed="false">Show</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit" id="loginBtn">Sign in</button>
+
+        <p class="demo-note">Design preview: sign in with <code>admin</code> / <code>admin123</code>.</p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/mock-api.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

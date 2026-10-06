@@ -1,0 +1,7 @@
+node_modules
+.env
+.vercel
+.playwright-mcp
+
+# Original full-size photo; the app uses the compressed copies in public/img/
+public/Serene Teal Hospital Reception Lobby.png
