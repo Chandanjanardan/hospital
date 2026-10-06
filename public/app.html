@@ -105,6 +105,27 @@
             <button type="submit" class="btn btn-primary" id="saveBtn">Save patient</button>
           </div>
         </form>
+
+        <section class="saved-slip" id="savedSlip" aria-labelledby="savedTitle" hidden>
+          <svg class="tick" viewBox="0 0 52 52" aria-hidden="true">
+            <circle class="tick-ring" cx="26" cy="26" r="23"/>
+            <path class="tick-mark" d="M15.5 27.5l7 7 14-15"/>
+          </svg>
+          <h2 id="savedTitle" tabindex="-1">Patient saved</h2>
+          <p class="saved-lede">Registration no. <b id="savedRegNo"></b> has been added to the register.</p>
+
+          <dl class="saved-details">
+            <div><dt>Patient</dt><dd id="savedName"></dd></div>
+            <div><dt>Gender</dt><dd id="savedGender"></dd></div>
+            <div><dt>Mobile</dt><dd id="savedMobile"></dd></div>
+            <div><dt>Date</dt><dd id="savedDate"></dd></div>
+          </dl>
+
+          <div class="saved-actions">
+            <a class="btn btn-quiet" href="#register">View in dashboard</a>
+            <button type="button" class="btn btn-primary" id="addAnother">Add another patient</button>
+          </div>
+        </section>
       </section>
 
       <!-- Dashboard -->
@@ -186,8 +207,18 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg class="toast-icon toast-icon-success" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11"/>
+      <path d="M7 12.5l3.2 3.2L17 9"/>
+    </svg>
+    <svg class="toast-icon toast-icon-error" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="11"/>
+      <path d="M12 7v6M12 16.5v.5"/>
+    </svg>
     <span id="toastText"></span>
-    <button type="button" class="btn-link" id="toastAction">View in dashboard</button>
+    <button type="button" class="toast-close" id="toastClose" aria-label="Close message">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
   </div>
 
   <script src="js/api.js"></script>

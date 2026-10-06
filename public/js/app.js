@@ -50,10 +50,24 @@
     });
     document.title = (view === 'new' ? 'New patient' : 'Dashboard') + ' · CarePoint Front Desk';
     if (view === 'register') loadRegister();
-    else resetForm();
+    else startNewEntry(false);
     window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', showView);
+
+  // Clicking the link for the page you're already on still resets it
+  // (e.g. "New patient" while the saved confirmation is showing)
+  document.querySelectorAll('a[href="#new"], a[href="#register"]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const target = link.getAttribute('href');
+      const current = location.hash === '#register' ? '#register' : '#new';
+      if (target === current) {
+        e.preventDefault();
+        if (location.hash !== target) history.replaceState(null, '', target);
+        showView();
+      }
+    });
+  });
 
   /* ---------- New patient form ---------- */
 
@@ -75,6 +89,32 @@
       if (err.status === 401) backToLogin();
     }
   }
+
+  /* After a save the form is swapped for a confirmation slip, so it's obvious
+     the entry went through before the next patient starts. */
+  function showSavedSlip(p) {
+    $('savedRegNo').textContent = p.id;
+    $('savedName').textContent = p.patientName;
+    $('savedGender').textContent = p.gender;
+    $('savedMobile').textContent = '+91 ' + p.mobile.slice(0, 5) + ' ' + p.mobile.slice(5);
+    $('savedDate').textContent = showDate(p.visitDate);
+    form.hidden = true;
+    $('savedSlip').hidden = false;
+    // Re-trigger the tick animation each time
+    const tick = $('savedSlip').querySelector('.tick');
+    tick.replaceWith(tick.cloneNode(true));
+    window.scrollTo(0, 0);
+    $('savedTitle').focus();
+  }
+
+  async function startNewEntry(focus = true) {
+    $('savedSlip').hidden = true;
+    form.hidden = false;
+    await resetForm();
+    if (focus) form.patientName.focus();
+  }
+
+  $('addAnother').addEventListener('click', () => startNewEntry());
 
   function setError(name, message) {
     const wrap = name === 'gender' ? $('gender-field') : form[name].closest('.field');
@@ -143,9 +183,8 @@
     try {
       const saved = await Api.createPatient(data);
       lastSavedId = saved.id;
-      toast(`Patient saved: ${saved.patientName}, reg. no. ${saved.id}`);
-      await resetForm();
-      form.patientName.focus();
+      showSavedSlip(saved);
+      toast(`${saved.patientName} saved as reg. no. ${saved.id}`, 'success');
     } catch (err) {
       if (err.fields) {
         fields.forEach((f) => setError(f, err.fields[f] || ''));
@@ -162,16 +201,16 @@
   /* ---------- Toast ---------- */
 
   let toastTimer;
-  function toast(text) {
+  function toast(text, type = 'error') {
+    const el = $('toast');
     $('toastText').textContent = text;
-    $('toast').classList.add('show');
+    el.dataset.type = type;
+    el.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => $('toast').classList.remove('show'), 6000);
+    // Errors stay until closed; confirmations fade on their own
+    if (type === 'success') toastTimer = setTimeout(() => el.classList.remove('show'), 4500);
   }
-  $('toastAction').addEventListener('click', () => {
-    $('toast').classList.remove('show');
-    location.hash = '#register';
-  });
+  $('toastClose').addEventListener('click', () => $('toast').classList.remove('show'));
 
   /* ---------- Dashboard ---------- */
 
