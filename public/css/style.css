@@ -339,6 +339,10 @@ textarea.input { height: auto; min-height: 88px; padding: 10px 12px; resize: ver
 
 .view[hidden] { display: none; }
 
+/* The entry form is a single column of fields, so centre it (heading included)
+   in the space beside the menu; the dashboard keeps the full width. */
+#view-new { max-width: 820px; margin: 0 auto; }
+
 /* Hidden until the session check passes, so signed-out visitors never see the app */
 .is-loading .main,
 .is-loading .rail-user { visibility: hidden; }
